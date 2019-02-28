@@ -37,6 +37,13 @@ queue_t *q_new()
 /* Free all storage used by queue */
 void q_free(queue_t *q)
 {
+    if (!q)
+        return;
+    if (!(q->head)) {
+        free(q);
+        return;
+    }
+
     /* How about freeing the list elements and the strings? */
     /* Free queue structure */
     list_ele_t *next_p;
@@ -131,7 +138,7 @@ bool q_remove_head(queue_t *q, char *sp, size_t bufsize)
     list_ele_t *remove_ele;
 
     /* If queue is NULL or queue is empty, return false. */
-    if (!q || !(q->head->value)) {
+    if (!q || !q_size(q)) {
         return false;
     }
 
@@ -155,6 +162,8 @@ int q_size(queue_t *q)
 {
     /* You need to write the code for this function */
     /* Remember: It should operate in O(1) time */
+    if (!q)
+        return 0;
     return q->size;
 }
 
@@ -167,6 +176,8 @@ int q_size(queue_t *q)
  */
 void q_reverse(queue_t *q)
 {
+    if (!q || q_size(q) == 0 || q_size(q) == 1)
+        return;
     /* You need to write the code for this function */
     list_ele_t *prev;
     list_ele_t *next;
