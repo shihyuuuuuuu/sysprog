@@ -25,8 +25,11 @@
 queue_t *q_new()
 {
     queue_t *q = malloc(sizeof(queue_t));
-    /* What if malloc returned NULL? */
+    /* If malloc return Null, return NULL. */
+    if (!q)
+        return NULL;
     q->head = NULL;
+    q->tail = NULL;
     return q;
 }
 
@@ -48,21 +51,23 @@ void q_free(queue_t *q)
 bool q_insert_head(queue_t *q, char *s)
 {
     list_ele_t *newh;
-    /* What should you do if the q is NULL? */
+    /* If queue is Null or fail to malloc, return false. */
     if (!q) {
         return false;
     }
     if (!(newh = malloc(sizeof(list_ele_t)))) {
         return false;
     }
-    /* Don't forget to allocate space for the string and copy it */
+    /* Allocate space for the string and copy it. */
     if (!(newh->value = malloc(sizeof(char) * (strlen(s) + 1)))) {
         free(newh);
         return false;
     }
     strcpy(newh->value, s);
 
-    /* What if either call to malloc returns NULL? */
+    if (q->head == NULL) {
+        q->tail = newh;
+    }
     newh->next = q->head;
     q->head = newh;
     return true;
@@ -80,7 +85,25 @@ bool q_insert_tail(queue_t *q, char *s)
 {
     /* You need to write the complete code for this function */
     /* Remember: It should operate in O(1) time */
-    return false;
+    list_ele_t *newt;
+
+    if (!q) {
+        return false;
+    }
+    if (!(newt = malloc(sizeof(list_ele_t)))) {
+        return false;
+    }
+    /* Allocate space for the string and copy it. */
+    if (!(newt->value = malloc(sizeof(char) * (strlen(s) + 1)))) {
+        free(newt);
+        return false;
+    }
+    strcpy(newt->value, s);
+    newt->next = NULL;
+
+    q->tail->next = newt;
+    q->tail = newt;
+    return true;
 }
 
 /*
@@ -94,10 +117,12 @@ bool q_insert_tail(queue_t *q, char *s)
 bool q_remove_head(queue_t *q, char *sp, size_t bufsize)
 {
     list_ele_t *remove_ele;
-    /* You need to fix up this code. */
+
+    /* If queue is NULL or queue is empty, return false. */
     if (!q || !(q->head->value)) {
         return false;
     }
+
     remove_ele = q->head;
     if (sp) {
         strncpy(sp, remove_ele->value, bufsize - 1);
