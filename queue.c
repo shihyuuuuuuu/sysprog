@@ -30,6 +30,7 @@ queue_t *q_new()
         return NULL;
     q->head = NULL;
     q->tail = NULL;
+    q->size = 0;
     return q;
 }
 
@@ -38,6 +39,16 @@ void q_free(queue_t *q)
 {
     /* How about freeing the list elements and the strings? */
     /* Free queue structure */
+    list_ele_t *next_p;
+    list_ele_t *next_next_p;
+    next_p = q->head;
+
+    while (next_p) {
+        next_next_p = next_p->next;
+        free(next_p->value);
+        free(next_p);
+        next_p = next_next_p;
+    }
     free(q);
 }
 
@@ -68,6 +79,7 @@ bool q_insert_head(queue_t *q, char *s)
     if (q->head == NULL) {
         q->tail = newh;
     }
+    q->size++;
     newh->next = q->head;
     q->head = newh;
     return true;
@@ -100,7 +112,7 @@ bool q_insert_tail(queue_t *q, char *s)
     }
     strcpy(newt->value, s);
     newt->next = NULL;
-
+    q->size++;
     q->tail->next = newt;
     q->tail = newt;
     return true;
@@ -128,7 +140,7 @@ bool q_remove_head(queue_t *q, char *sp, size_t bufsize)
         strncpy(sp, remove_ele->value, bufsize - 1);
         sp[bufsize - 1] = '\0';
     }
-
+    q->size--;
     q->head = q->head->next;
     free(remove_ele->value);
     free(remove_ele);
@@ -143,7 +155,7 @@ int q_size(queue_t *q)
 {
     /* You need to write the code for this function */
     /* Remember: It should operate in O(1) time */
-    return 0;
+    return q->size;
 }
 
 /*
