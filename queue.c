@@ -20,7 +20,7 @@
 
 /*
   Create empty queue.
-  Return NULL if could not allocate space.
+  Return NUL if could not allocate space.
 */
 queue_t *q_new()
 {
@@ -176,25 +176,24 @@ int q_size(queue_t *q)
  */
 void q_reverse(queue_t *q)
 {
+    /* If q is NULL or q is empty or just one element, return. */
     if (!q || q_size(q) == 0 || q_size(q) == 1)
         return;
-    /* You need to write the code for this function */
-    list_ele_t *prev;
-    list_ele_t *next;
-    list_ele_t *next_next;
 
-    q->tail = q->head;
+    list_ele_t *prev;
+    list_ele_t *node;
+    list_ele_t *next;
+
     prev = q->head;
-    next = q->head->next;
-    q->head->next = NULL;
-    while (1) {
-        next_next = next->next;
-        next->next = prev;
-        prev = next;
-        next = next_next;
-        if (next == NULL) {
-            q->head = prev;
-            break;
-        }
+    node = prev->next;
+    q->tail = prev;
+    prev->next = NULL;
+    /* Iterate the list. If reach the last node, let q->head point to it. */
+    while (node) {
+        next = node->next;
+        node->next = prev;
+        prev = node;
+        node = next;
     }
+    q->head = prev;
 }
