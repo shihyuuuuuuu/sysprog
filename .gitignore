@@ -1,3 +1,37 @@
+<<<<<<< HEAD
 handin.tar
 qtest
 *.o
+=======
+# Prerequisites
+*.d
+.cache.mk
+
+# Object files
+*.o
+*.ko
+*.elf
+
+# Linker output
+*.map
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Libraries
+*.a
+
+# Kernel Module Compile Results
+*.mod*
+*.cmd
+.tmp_versions/
+modules.order
+Module.symvers
+Mkfile.old
+dkms.conf
+
+# test-oriented
+client
+out
+>>>>>>> fibdrv/master
